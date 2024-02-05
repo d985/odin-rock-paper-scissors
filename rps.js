@@ -1,3 +1,24 @@
+const rockBtn = document.querySelector('#rockBtn');
+rockBtn.addEventListener('click', () => {
+    playRound("rock");
+});
+
+
+const paperBtn = document.querySelector("#paperBtn");
+paperBtn.addEventListener('click', () => {
+  playRound("paper");
+});
+
+const scissorsBtn = document.querySelector("#scissorsBtn");
+scissorsBtn.addEventListener('click', () => {
+  playRound("scissors");
+});
+
+const results = document.querySelector("#results");
+const scoreboard = document.querySelector("#scoreboard");
+let playerScore = 0;
+let computerScore = 0;
+
 function getComputerChoice() {
     let computerChoice = Math.floor(Math.random() * 3);
     switch(computerChoice) {
@@ -10,8 +31,7 @@ function getComputerChoice() {
     }
 }
 
-function playRound() {  
-    let playerChoice = prompt("Enter rock, paper, or scissors:", "rock").toLowerCase();
+function playRound(playerChoice) {  
     let computerChoice = getComputerChoice();
     console.log(playerChoice);
     console.log(computerChoice);
@@ -50,43 +70,36 @@ function playRound() {
 
 function youWin(playerChoice,computerChoice) {
     console.log("You win! " + playerChoice.charAt(0).toUpperCase() + playerChoice.slice(1).toLowerCase() + " beats " + computerChoice + ".");
-    return "player"
+    results.textContent = `You win!  ${playerChoice.charAt(0).toUpperCase()}${playerChoice.slice(1).toLowerCase()} beats ${computerChoice}.`;
+    
+    playerScore += 1;
+    if (playerScore === 5) {
+        scoreboard.textContent = `Score: Player ${playerScore}, Computer ${computerScore}. Player wins!`;
+        playerScore = 0;
+        computerScore = 0;
+    }
+    else {
+        scoreboard.textContent = `Score: Player ${playerScore}, Computer ${computerScore}`;
+    }
 }
 
 function youLose(playerChoice,computerChoice) {
     console.log("You lose! " + computerChoice.charAt(0).toUpperCase() + computerChoice.slice(1) + " beats " + playerChoice.toLowerCase() + ".");
-    return "computer";
+    results.textContent = `You lose! ${computerChoice.charAt(0).toUpperCase()}${computerChoice.slice(1)} beats ${playerChoice.toLowerCase()}.`;
+
+    computerScore += 1;
+    if (computerScore === 5) {
+        scoreboard.textContent = `Score: Player ${playerScore}, Computer ${computerScore}. Computer wins :(`;
+        playerScore = 0;
+        computerScore = 0;
+    }
+    else {
+        scoreboard.textContent = `Score: Player ${playerScore}, Computer ${computerScore}`;
+    }
 }
 
 function tieGame () {
     console.log("TIE! Re-play the round.");
-    return(playRound());
+    results.textContent = "TIE! Re-play the round.";
+    scoreboard.textContent = `Score: Player ${playerScore}, Computer ${computerScore}`;
 }
-
-function invalidSelection () {
-    console.log("Invalid Selection. Enter rock, paper, or scissors.");
-    return(playRound());
-}
-
-function gameBestofFive () {
-    let playerWins = 0;
-    let computerWins = 0;
-    let winner;
-
-    while (playerWins < 3 && computerWins < 3) {
-        winner = playRound();
-        switch(winner) {
-            case "player":
-                playerWins++;
-                console.log("Player: " + playerWins + " wins, Computer: " + computerWins + " wins")
-                break;
-            case "computer":
-                computerWins++;
-                console.log("Player: " + playerWins + " wins, Computer: " + computerWins + " wins")
-                break;
-        }
-    }
-    console.log( (playerWins===3 ? "Player wins!" : "Computer wins!"));
-}
-
-gameBestofFive();
